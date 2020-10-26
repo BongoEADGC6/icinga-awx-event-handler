@@ -208,11 +208,10 @@ try:
         log_run("ERROR: API call to start job failed")
         error("Could not start tower job: {}"
               .format(job_started['result_stdout']))
-except Exception as err:
-    log_run("ERROR: bad request on API call -- \
-            URI[/job_templates/{}/launch/] DATA[{}]"
+except requests.exceptions.HTTPError:
+    log_run("ERROR: bad request on API call -- URI[/job_templates/{}/launch/] DATA[{}]"
             .format(template_number, job_data))
-    print(err)
-    error("There was a bad request on the API call -- \
-          URI[/job_templates/{}/launch/] DATA[{}]"
+    error("There was a bad request on the API call -- URI[/job_templates/{}/launch/] DATA[{}]"
           .format(template_number, job_data))
+except Exception as err:
+    error(err)
