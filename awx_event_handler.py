@@ -121,11 +121,12 @@ def apiGet(api_uri):
     response.raise_for_status()
     return json.loads(response.text)
 
-
 if not args.template.isdigit():
     try:
         # when --template is a name, we need the number
         # find_template = apiGet('/job_templates/')
+        if args.verbose:
+            print("Given template is a name")
         url = '/job_templates/?name__icontains={}'.format(args.template)
         find_template = apiGet(url)
         template_number = find_template['results'][0]['id']
@@ -135,6 +136,8 @@ if not args.template.isdigit():
         error("The template {} could not be found.".format(args.template))
 else:
     # when --template is a number
+    if args.verbose:
+            print("Given template is an ID")
     template_number = args.template
 
 try:
