@@ -2,11 +2,16 @@
 
 Utilizes the AWX API to launch jobs based on Icinga/Nagios event handler rules.
 
+```
 python3 awx_event_handler.py -H tower.example.com --username admin --password password --template Icinga - Service Restart --inventory Icinga2 Monitored Hosts --limit hostname.example.com --extra_vars {"service_to_restart":"logstash","service_manager":"upstart"}
+```
 
 Software requirements
+
 Python 3+
-Nagios 3.5 or higher | Icinga2 
+
+Nagios 3.5 or higher or Icinga2 
+
 Ansible Tower 3.2 or higher
 
 ## Icinga configuration
@@ -16,7 +21,7 @@ Ansible Tower 3.2 or higher
 
 ### Example 1 - short call to the handler, wide impact
 This will trigger the job run against all the hosts on the specified inventory.
-
+```
 /etc/nagios/conf.d/eventhandlers.cfg
 define command {
     command_name        tower-handler-min
@@ -32,10 +37,10 @@ define service {
     check_command               check_myappservice
     event_handler               tower-handler-min!My Template!My Inventory
 }
-
+````
 ### Example 2 - longer call to the handler, more precise action
 This allows the use of all parameters during the handler call, which provides more information to the job template, allowing fore more precise action.
-
+```
 /etc/nagios/conf.d/eventhandlers.cfg
 define command {
     command_name        tower-handler-full
@@ -50,7 +55,7 @@ define service {
     check_command               check_myappservice
     event_handler               tower-handler-full!My Template!My Inventory!my_variable: value!<fqdn>"
 }
-
+```
 Note: in this case, <fqdn> can be either the host itself, or a totally different host, as long as it exists in the inventory.
 
 Useful variations
